@@ -11,8 +11,16 @@
         <noscript>This redirection service requires JavaScript to be enabled in the browser.</noscript>
     </main>
     <script>
-        const root = document.querySelector( 'main' );
-        root.textContent = `URL: ${location.href}`;
+        const [ host, path ] = `${location.pathname}${location.hash}`.replace(/^\/ghp-redirect-poc\//, '').split('/', 2) || [ null, null ],
+            root = document.querySelector( 'main' );
+        if ( host === null ) {
+            root.innerHTML = `URL format: ${location.host}/ghp-redirect-poc/<i><b>wiki domain name</b></i>/<i><b>optional path</b></i>`;
+        } else {
+            root.textContent = `Redirecting to ${host} over at wiki.gg, path: ${path ?? 'main page'}`;
+            setTimeout( () => {
+                location.href = `https://${host}.wiki.gg/wiki/${path ?? ''}`;
+            }, 1000 );
+        }
     </script>
 </body>
 </html>
